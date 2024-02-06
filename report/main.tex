@@ -110,6 +110,7 @@ basewidth={0.57em,0.52em},
 \chapter{電気回路解析の基本}
 \section{概要}
 本章では電気回路解析の基本的な方法について学習したことを解説する。
+学習には教科書~\cite{ElectricCircuit}を使用した。
 ロボットを作るときには、回路設計が必要不可欠である。
 正しい知識のもとに回路設計を行えば初歩的なミスによる部品の破壊が減らせるほか、
 トラブルが発生したときの原因究明にも回路解析の知識が役に立つ。
@@ -119,6 +120,7 @@ basewidth={0.57em,0.52em},
 一通りの知識を抑えておくことで直接的には関係ないように思われる場面で役に立つことは非常に多い。
 
 本章では高校で学習するキルヒホッフの法則を紹介したあと、キルヒホッフの法則よりも楽に早く回路を解析するための手法を紹介し、キルヒホッフの法則からの脱却を図るというコンセプトで電気回路解析の基礎を解説する。
+
 
 \section{電気回路の導入}
 \subsection{導入}
@@ -1083,6 +1085,20 @@ setupで実行するほか、Xbeeで停止させていた走行体を再び走�
 
 
 
+
+
+
+
+
+
+
+
+\bibliography{reference}
+\bibliographystyle{junsrt}
+
+
+
+
 \appendix
 
 % \chapter{応用的な電気回路解析}
@@ -1138,7 +1154,13 @@ ev3の性能評価のために使われた。
 \subsection{Version 2}
 最終的に採用された設計。本編で解説した通りのものである。
 ホイールベース、横幅ともに限界まで縮め、旋回性能を上げた。
-
+\begin{figure}[bth]
+  \centering
+  \includegraphics[keepaspectratio, scale=0.11]
+       {img/ver1_machine.jpg}
+  \caption{ベース Version 2を採用した機体}
+  \label{fig:v2_machine}
+ \end{figure}
 
 
 \section{メイン基板}
