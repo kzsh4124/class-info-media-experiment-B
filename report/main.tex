@@ -7,7 +7,7 @@
 \usepackage{siunitx}
 \mathtoolsset{showonlyrefs=true}
 % 画像
-\usepackage[draft]{graphicx}
+\usepackage{graphicx}
 % ロゴ関係
 \usepackage{bxtexlogo}
 \bxtexlogoimport{*,**}
@@ -99,15 +99,15 @@ basewidth={0.57em,0.52em},
 
 \section{本レポートの構成}
 %TODO: 制御工学の概説を書く
-2章では、電気回路解析の基本についての学習成果として、直流回路および交流回路の解析手法、過渡現象、よく用いられる素子系についてをまとめる。
-3章は制御工学の基本についての学習成果をまとめる。
-2, 3章の内容は一般的なものであるから、読む時間がない場合は飛ばして次の4章から読むことを推奨する。
-4章では、実際に走行体に使用したハードウェア設計について部分に分割して示す。
-5章では、ソフトウェア設計について、システム構成、制御手法および、部分ごとの実装について示す。
-これら設計に関する章ではこれから作ろうとする人に向けた解説という体で記述している。
-6章では、走行体の評価、振り返り、改善点、感想等について示す。
+\ref{cha:electric}章では、電気回路解析の基本についての学習成果として、直流回路および交流回路の解析手法、過渡現象、よく用いられる素子系についてをまとめる。
 
-\chapter{電気回路解析の基本}
+\ref{cha:electric}章の内容は一般的なものであるから、読む時間がない場合は飛ばして次の\ref{cha:hardware}章から読むことを推奨する。
+\ref{cha:hardware}章では、実際に走行体に使用したハードウェア設計について部分に分割して示す。
+\ref{cha:software}章では、ソフトウェア設計について、システム構成、制御手法および、部分ごとの実装について示す。
+これら設計に関する章ではこれから作ろうとする人に向けた解説という体で記述している。
+\ref{cha:eval}章では、走行体の評価、振り返り、改善点、感想等について示す。
+
+\chapter{電気回路解析の基本}\label{cha:electric}
 \section{概要}
 本章では電気回路解析の基本的な方法について学習したことを解説する。
 学習には教科書~\cite{ElectricCircuit}を使用した。
@@ -632,7 +632,7 @@ $I_2$について、$R_3$の両端を開放して、開放電圧と内部抵抗�
 \omega を角周波数といい、周波数$f$を用いて$\omega = 2 \pi f$と表される。
 $V_m$を振幅、
 \theta を位相といい、交流回路においては、振幅のほかに位相のズレまで考慮する必要が出てくる。
-$\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$\frac{\pi}{2}$遅れているなどと言い、
+$\theta = 0$のときに対し、たとえば$\theta = -\frac{\pi}{2}$のときを位相が$\frac{\pi}{2}$遅れているなどと言い、
 逆に$\theta >0 $であれば位相が進んでいると言う。
 
 \subsection{交流回路上の素子}
@@ -644,7 +644,7 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 ゆえに、抵抗の両端に正弦波の電圧を印加すれば、
 \begin{align}
   v(t) &= Ri(t)\\
-  i(t) = \frac{V_m}{R} \sin(\omega t + \theta)
+  i(t) &= \frac{V_m}{R} \sin(\omega t + \theta)
 \end{align}
 
 よって位相は同相であり、電圧の振幅$V_m$、電流の振幅$I_m$に対し、
@@ -653,15 +653,42 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 \]
 の関係がある。
 
-\subsubsection{コンデンサ}
+\subsubsection{キャパシタ}
+キャパシタ、またはコンデンサは、2つの導体板が向き合った構造の素子であり、両端に電圧$V$を印加すると、電荷移動が発生して2つの導体板がそれぞれ$+Q$、$-Q$ [C] に帯電する。このとき各導体板に蓄えられる電荷量は与えた電圧に比例し、
+\[
+  Q = CV
+  \]
+の関係をみたす。この定数$C$を静電容量、または単に容量といい、単位をファラッド [F] で表す。
+
+電流の基本定義から、$i(t) = \dft{q(t)}$であるから、この$q$に$q(t)=Cv(t)$を代入すれば、
+\[
+  i(t) = C \dft{v(t)} \quad .
+\]
+この関係は逆に積分形式でも表され、
+\[
+  v(t) = \frac{1}{C}\int_{-\infty}^{t} i(t) \diff t \quad .
+\]
+キャパシタ$C$の両端に正弦波電圧を印加すれば、
+\begin{align}
+  v(t) &= V_m \sin \omega t\\
+  i(t) &= \omega CV_m \sin (\omega t + \ang{90})
+\end{align}
+となるから、
+電流の位相が電圧より常に\ang{90}進み、電圧の振幅$V_m$、電流の振幅$I_m$に対し、
+\[
+  V_m = \frac{1}{\omega C} I_m
+\]
+が成り立つ。$\frac{1}{\omega C}$を容量性リアクタンスという。
+
 
 
 \subsubsection{インダクタ}
 インダクタはコイルとも呼ばれる、鉄心、フェライトコアまたは空心にエナメル線等の導線を巻き付けた素子である。
-電磁気学によれば、コイルに流れた電流が時間変化すると、自己誘導により逆起電力$v(t)$が発生し、以下のように表される。
+電磁気学によれば、コイルに流れた電流が時間変化すると、自己誘導により逆起電力$v(t)$が$i(t)$と逆向きに発生し\footnote{電磁気学においては、電流に沿った向きに$v = -L\dft{i}$と、符号付きで与えられるが、はじめから電流と逆向きを正方向にとっておけばマイナスを付ける必要はない。}、以下のように表される。
+
 
 \begin{equation}
-  v(t) = L \dft{i}
+  v(t) = L \dft{i(t)}
 \end{equation}
 
 この関係は以下の積分形式でも表される。
@@ -672,6 +699,49 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 
 これらの式において、$L$をインダクタンスと呼び、ヘンリー [H]の単位を用いる。
 
+インダクタ$L$の両端に正弦波電圧を印加すれば、
+
+
+\begin{align}
+  v(t) &= V_m \sin \omega t\\
+  i(t) &= \frac{1}{\omega L} V_m \sin(\omega t - \ang{90})
+\end{align}
+となるから、
+電圧の位相は電流の位相よりも常に\ang{90}進んでおり、電圧の振幅$V_m$、電流の振幅$I_m$に対し、
+\[
+  V_m = \omega L I_m
+\]
+の関係がある。$\omega L$を誘導性リアクタンスという。
+
+\subsection{実効値}
+
+\[
+  V_e = \sqrt{\frac{1}{T}\int_{0}^{T} v^2(t) \diff t}
+\]
+のように2乗平均平方根値で定義される電圧値（または電流値）を実効値という。
+ただし、$T$は周期である。正弦波交流に対しては、
+\begin{align}
+  V_e &= \frac{V_m}{\sqrt{2}}\\
+  I_e &= \frac{I_m}{\sqrt{2}}
+\end{align}
+を満たす。
+一般的に100 V の交流などというときには、実効値を示している。
+
+\newcommand{\vsin}{V_m \sin(\omega t + \theta)}
+\newcommand{\isin}{I_m \sin(\omega t + \theta)}
+\subsection{交流回路の例}
+\subsubsection{RL回路}
+まず、正弦波交流電源$e(t) = \vsin$と抵抗$R$、インダクタ$L$を直列接続した回路を考えよう。
+このとき回路方程式は、
+\[
+  Ri +L \dft{i} = \vsin
+\]
+このとき、回路が接続された瞬間は過渡現象が生じるが、十分長い時間が経つと応答電流も正弦波となり、そこから逸脱することはない。この状態を定常状態と呼ぶ。この章では定常状態のみを考えるものとする。
+この式において、応答電流の一般解は微分方程式を解けば得られるが、定常状態の解のみを求めるならば、応答電流の形を$i(t) = \isin$とおいて解けば良い。
+そのように解けば、
+\[
+  i(t) = \frac{E_m}{\sqrt{}}
+\]
 
 \subsection{複素記号法}
 
@@ -697,24 +767,74 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 
 
 
-\chapter{ハードウェア設計}
+\chapter{ハードウェア設計}\label{cha:hardware}
 \section{ハードウェア概観}
 本章ではハードウェア設計について説明する。
+今回設計したハードウェアは大きく分けてベース、光センサ基板、メイン基板、その他にユニバーサル基板を用いた小基盤から実装されている。
+
+
+外観を示すと、図\ref{fig:overview}のようになっている。
+\begin{figure}[tbh]
+  \centering
+  \includegraphics[keepaspectratio, scale=0.07]
+       {img/img_v3Overview.jpg}
+  \caption{ハードウェアの外観}
+  \label{fig:overview}
+ \end{figure}
+
+
+
+
+\section{回路図}
+図\ref{fig:circuit}に回路図を示す。
+
+\begin{figure}[tbh]
+  \centering
+  \includegraphics[keepaspectratio, scale=0.3]
+       {img/figure_all_circuit.png}
+  \caption{回路図}
+  \label{fig:circuit}
+ \end{figure}
+
+おおよそ右側の`SeeduinoXIAO'より右側が光センサの基板部分の回路であり、それより左側がメイン基板の回路である。
+
 
 %TODO
 \section{部品表}
 以下に部品表一覧を示す。
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{l|l|l|l|l} \hline
+      記号 & 部品名 & 単価(円) & 個数 & 購入先 \\ \hline
+      PR & フォトリフレクタ & 70 & 8 & \href{https://akizukidenshi.com/catalog/g/g104500/}{秋月電子通商} \\
+      R1 $\sim$ R8 & チップ抵抗($\SI{1}{\Mohm}$) & 0.71 & 8 & \href{https://ja.aliexpress.com/item/1005001794062302.html?channel=twinner}{AliExpress} \\
+      R9 $\sim$ R16 & チップ抵抗($\SI{200}{\ohm}$) & 0.71 & 8 & \href{https://ja.aliexpress.com/item/1005001794062302.html?channel=twinner}{AliExpress} \\
+      MP1 & ICソケット (16P) & 13 & 1 & \href{https://akizukidenshi.com/catalog/g/g100007/}{秋月電子通商} \\
+      PH & PHコネクタ ベース付ポスト & 15 & 1 & \href{https://akizukidenshi.com/catalog/g/g112806/}{秋月電子通商}\\\hline
+    \end{tabular}
+    \caption{センサ部 部品表}
+    \label{センサ部品表}
+  \end{center}
+\end{table}
 %TODO
 \section{ベース}
 ベースは3Dプリンタを用いて造形されており、材質はPLAフィラメントである。
 部品としては本体、センサ部連結パーツ、接地部、その他小部品に大別される。
-以下図を示す。
-%TODO
+図\ref{fig:3dmodel}に3Dモデルを示す。
+
+\begin{figure}[tbh]
+  \centering
+  \includegraphics[keepaspectratio, scale=0.4]
+       {img/figure_carFramev3_angle.png}
+  \caption{ハードウェア設計の3Dモデル}
+  \label{fig:3dmodel}
+ \end{figure}
+
 
 \section{光センサ部}
-光センサ部は、プルアップ抵抗とフォトトランジスタによる光センサが8個付いており、これらの信号はセンサ用マイコンに送られて1つの信号に集約されたうえでメイン基板にアナログ値として送られる。
-回路図は以下のようになっている。
-%TODO
+光センサ部は、プルアップ抵抗とフォトトランジスタによる光センサが8個付いており、これらの信号はセンサ用マイコンに送られてソフトウェア的に1つの信号に集約されたうえでメイン基板にアナログ値として送られる。
+
 
 \section{光センサ拡張マイコン基板}
 本来は光センサ出力はマルチプレクサを経由してメイン基板ですべて処理される予定であったが、問題が発生したため、マルチプレクサの部分からユニバーサル基板を生やし、その基板上に別のマイコンを載せて別処理させることになった。
@@ -729,7 +849,7 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 
 信号回路は、センサ値の取得、マイコンによる制御、モータのPWM制御等に使用されている。
 
-回路図は以下のようになっている。
+
 
 \section{電源基板}
 バッテリセルを4つ直列接続するためのPHソケットが並んだユニバーサル基板。すべての電源はこの基板から取られている。スイッチもこの基板に実装されている。
@@ -737,14 +857,13 @@ $\theta = 0$のときに対し、$\theta = -\frac{\pi}{2}$のときを位相が$
 
 
 
-%TODO
 
 
 
 
 
 
-\chapter{ソフトウェア設計}
+\chapter{ソフトウェア設計}\label{cha:software}
 \section{ソフトウェア概観}
 %ブロック線図とかこのへんに書く
 \subsection{全体構成}
@@ -1066,13 +1185,13 @@ setupで実行するほか、Xbeeで停止させていた走行体を再び走�
 
 \subsubsection{Xbee()}
 無線通信を行い、ソフトウェア的に停止、発進を行うための関数。
-高速でのデバッグでは壁に衝突するなど事故が乱発していたため、必ず機体を緊急停止できる人員を配置し、その人の許可\footnote{電源を入れると発進する状態のときに``Cleared for run"の合図。後に電源を入れても自動で発進せず、管制管が発進信号を送るように変更された。}なく発進させてはいけないという管制塔システムを導入した。
+高速でのデバッグでは壁に衝突するなど事故が乱発していたため、必ず機体を緊急停止できる人員を配置し、その人の許可\footnote{電源を入れると発進する状態のときに``Cleared for run"の合図。後に電源を入れても自動で発進せず、管制官が発進信号を送るように変更された。}なく発進させてはいけないという管制塔システムを導入した。
 その結果安全性が向上し、機体を破壊することなく無事本番を迎えられた。
 
 
 
 
-\chapter{評価}
+\chapter{評価}\label{cha:eval}
 
 \section{ループ速度}
 
